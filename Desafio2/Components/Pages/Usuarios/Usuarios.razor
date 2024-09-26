@@ -1,0 +1,82 @@
+﻿@page "/usuarios"
+
+<h3>Usuarios</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <a href="/usuarios/new">
+                <button type="button" class="btn btn-success">Crear</button>
+            </a>
+        </div>
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Filtrar por..." @bind="filtro" />
+                <button type="button" class="btn btn-outline-secondary" @onclick="Buscar">Buscar</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>NombreUsuario</th>
+                    <th>Contraseña</th>
+                    <th>Email</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Usuario usuario in usuarios)
+                {
+                    <tr>
+                        <td>@usuario.Id</td>
+                        <td>@usuario.Nombre</td>
+                        <td>@usuario.Apellido</td>
+                        <td>@usuario.NombreUsuario</td>
+                        <td>@usuario.Contraseña</td>
+                        <td>@usuario.Email</td>
+                        <td>
+                            <a href="/usuarios/@usuario.Id/Editar">Editar</a>
+                        </td>
+                        <td>
+                            <button @onclick="@(() => EliminarUsuario(usuario.Id))" class="btn btn-danger">
+                                Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+@code {
+    private List<Usuario> usuarios = [];
+
+    private string filtro = string.Empty;
+
+    private UsuarioData? dataAccess;
+
+    protected override void OnInitialized()
+    {
+        dataAccess = new UsuarioData();
+
+        usuarios = dataAccess.ListUsers();
+    }
+
+    public void EliminarUsuario(int id)
+    {
+        dataAccess.DeleteUser(id);
+        usuarios = dataAccess.ListUsers();
+    }
+
+    public void Buscar() => usuarios = dataAccess.GetUserBy(filtro);
+}
+

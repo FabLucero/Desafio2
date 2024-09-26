@@ -1,0 +1,61 @@
+using Desafio2.Database
+using Desafio2.Models
+@inject NavigationManager NavigationManager
+
+<EditForm Model="Producto" OnSubmit="CreateOrUpdateProduct" FormName="productos-form">
+    <div class="form-group">
+         <label for="descripciones">
+            Descripciones
+            <InputText type="text" class="form-control" id="descripciones" @bind-Value="Producto.Descripciones" />
+         </label>
+    </div>
+    <div class="form-group">
+        <label for="costo">
+            Costo
+            <InputNumber type="number" class="form-control" id="costo" @bind-Value="Producto.Costo" />
+        </label>
+    </div>
+     <div class="form-group">
+        <label for="precioVenta">
+            Precio de Venta
+            <InputNumber type="number" class="form-control" id="precioVenta" @bind-Value="Producto.PrecioVenta" />
+        </label>
+    </div>
+      <div class="form-group">
+        <label for="stock">
+            Stock
+            <InputNumber type="number" class="form-control" id="stock" @bind-Value="Producto.Stock" />
+        </label>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</EditForm>
+
+@code {
+
+    private ProductosData? dataAccess;
+
+    [Parameter]
+    public Producto Producto { get; set; }
+
+    protected override void OnInitialized()
+    {
+        dataAccess = new ProductosData();
+    }
+
+    public void CreateOrUpdateProduct()
+    {
+        if (Producto.Id > 0)
+        {
+           
+            dataAccess.UpdateProduct(Producto.Id, Producto);
+
+        }
+        else
+        {
+            dataAccess.InsertProduct(Producto);
+           
+        }
+
+        NavigationManager.NavigateTo("/productos");
+    }
+}

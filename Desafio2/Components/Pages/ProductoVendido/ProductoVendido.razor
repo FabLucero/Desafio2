@@ -1,0 +1,69 @@
+﻿@page "/productoVendido"
+
+<h3>Productos Vendidos</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <a href="/productoVendidos/new">
+                <button type="button" class="btn btn-success">Crear</button>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>IdProducto</th>
+                    <th>Stock</th>
+                    <th>IdVenta</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (ProductosVendido productov in productosv)
+                {                    
+                    <tr>                        
+                        <td>@productov.Id</td>
+                        <td>@productov.IdProducto</td>
+                        <td>@productov.Stock</td>
+                        <td>@productov.IdVenta</td>
+                        <td>
+                            <a href="/productoVendido/@productov.Id/Editar">Editar</a>
+                        </td>
+                        <td>
+                            <button @onclick="@(() => EliminarProducto(productov.Id))" class="btn btn-danger">
+                                Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+@code {
+    private List<ProductosVendido> productosv = [];
+
+    private ProductoVendidoData? dataAccess;
+
+    protected override void OnInitialized()
+    {
+        dataAccess = new ProductoVendidoData();
+
+        productosv = dataAccess.ListarProductosVendidos();
+    }
+
+    public void EliminarProducto(int id)
+    {
+        dataAccess.EliminarProductoVendido(id);
+        productosv = dataAccess.ListarProductosVendidos();
+    }
+
+}
+

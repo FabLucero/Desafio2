@@ -1,0 +1,63 @@
+﻿using Desafio2.Database
+using Desafio2.Models
+@inject NavigationManager NavigationManager
+
+<h3>ProductosVendidos</h3>
+
+<EditForm Model="ProductosVendido" OnSubmit="CreateOrUpdateProductoVendido" FormName="productosVendidos-form">
+    <div class="form-group">
+        <label for="id">
+            ID
+            <InputNumber type="number" class="form-control" id="id" @bind-Value="ProductosVendido.Id" />
+        </label>
+    </div>
+    <div class="form-group">
+        <label for="idProducto">
+            IdProducto
+            <InputNumber type="number" class="form-control" id="nombre" @bind-Value="ProductosVendido.IdProducto" />
+        </label>
+    </div>
+    <div class="form-group">
+        <label for="stock">
+            Stock
+            <InputNumber type="number" class="form-control" id="apellido" @bind-Value="ProductosVendido.Stock" />
+        </label>
+    </div>
+    <div class="form-group">
+        <label for="idVenta">
+            IdVenta
+            <InputNumber type="number" class="form-control" id="nombreUsuario" @bind-Value="ProductosVendido.IdVenta" />
+        </label>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</EditForm>
+
+@code {
+
+    private ProductoVendidoData? dataAccess;
+
+    [Parameter]
+    public ProductosVendido ProductosVendido { get; set; }
+
+    protected override void OnInitialized()
+    {
+        dataAccess = new ProductoVendidoData();
+    }
+
+    public void CreateOrUpdateProductoVendido()
+    {
+        if (ProductosVendido.Id > 0)
+        {
+
+            dataAccess.ModificarProductoVendido(ProductosVendido.Id, ProductosVendido);
+
+        }
+        else
+        {
+            dataAccess.CrearProductoVendido(ProductosVendido);
+
+        }
+
+        NavigationManager.NavigateTo("/productoVendido");
+    }
+}

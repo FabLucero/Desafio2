@@ -1,0 +1,27 @@
+﻿@page "/venta/{id:int}/editar"
+
+<h3>Editar Venta</h3>
+
+@if (Venta.Id == null)
+{
+    <p>No existe la venta</p>
+}
+else
+{
+    <VentaForm Venta="Venta"/>
+}
+
+@code {
+    private VentaData dataAccess;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    private Venta? Venta;
+      
+    protected override void OnInitialized()
+    {
+        dataAccess = new VentaData();
+        Venta = dataAccess.ObtenerVenta(Id);
+    }
+}

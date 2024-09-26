@@ -1,0 +1,26 @@
+﻿@page "/productos/{id:int}/editar"
+
+<h3>Editar Producto</h3>
+
+@if (Producto.Id == null)
+{
+    <p>No existe el producto</p>
+}
+else
+{
+    <ProductosForm Producto="Producto" />
+}
+
+@code {
+    private ProductosData dataAccess;
+    [Parameter]
+    public int Id { get; set; }
+
+    private Producto? Producto;
+
+    protected override void OnInitialized()
+    {
+        dataAccess = new ProductosData();
+        Producto = dataAccess.GetOneProduct(Id);
+    }
+}

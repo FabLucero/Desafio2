@@ -1,0 +1,80 @@
+﻿@page "/productos"
+
+<h3>Productos</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <a href="/productos/new">
+                <button type="button" class="btn btn-success">Crear</button>                
+            </a>
+        </div>
+        <div class="col-6">
+            <div class="input-group mb-3">
+                 <input type="text" class="form-control" placeholder="Filtrar por..." @bind="filtro" />
+                <button type="button" class="btn btn-outline-secondary" @onclick="Buscar">Buscar</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Descripcion</th>
+                    <th>Costo</th>
+                    <th>PrecioVenta</th>
+                    <th>Stock</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Producto producto in productos)
+                {
+                    <tr>
+                        <td>@producto.Id</td>
+                        <td>@producto.Descripciones</td>
+                        <td>@producto.Costo</td>
+                        <td>@producto.PrecioVenta</td>
+                        <td>@producto.Stock</td>                       
+                        <td>
+                            <a href="/productos/@producto.Id/Editar">Editar</a>
+                        </td>
+                        <td>
+                            <button @onclick="@(() => EliminarProducto(producto.Id))" class="btn btn-danger">
+                                Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+@code {
+    private List<Producto> productos = [];
+
+    private string filtro = string.Empty;
+
+    private ProductosData? dataAccess;
+
+    protected override void OnInitialized()
+    {
+        dataAccess = new ProductosData();
+
+        productos = dataAccess.ListProducts();
+    }
+
+    public void EliminarProducto(int id)
+    {
+        dataAccess.DeleteProduct(id);
+        productos = dataAccess.ListProducts();
+    }
+
+    public void Buscar() => productos = dataAccess.GetProductBy(filtro);
+}
+

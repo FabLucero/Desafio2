@@ -1,0 +1,26 @@
+﻿@page "/usuarios/{id:int}/editar"
+
+<h3>Editar Usuario</h3>
+
+@if (Usuario.Id == null)
+{
+    <p>No existe el usuario</p>
+}
+else
+{
+    <UsuariosForm Usuario="Usuario" />
+}
+
+@code {
+    private UsuarioData dataAccess;
+    [Parameter]
+    public int Id { get; set; }
+
+    private Usuario? Usuario;
+
+    protected override void OnInitialized()
+    {
+        dataAccess = new UsuarioData();
+        Usuario = dataAccess.GetOneUser(Id);
+    }
+}
